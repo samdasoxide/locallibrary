@@ -27,6 +27,12 @@ def index(request):
     # Book titles that contain the word 'python'
     num_python = Book.objects.filter(title__icontains='python').count()
 
+    # How many times the site has been visited
+    # Each time we receive a request we increament the value
+    # store it back in the session
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
     # Render the HTML template index.html with the data in the context variable
     return render(
         request,
@@ -35,7 +41,8 @@ def index(request):
                  'num_instances_available': num_instances_available,
                  'num_authors': num_authors,
                  'num_genre': num_genre,
-                 'num_python': num_python
+                 'num_python': num_python,
+                 'num_visits': num_visits
                  }
     )
 
@@ -47,3 +54,11 @@ class BookListView(generic.ListView):
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
