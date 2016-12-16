@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
 
 # Required for unique book instances
+from datetime import date
 import uuid
 
+from django.contrib.auth.models import User
 from django.db import models
 # Used to generate URLs by reverseing the URL patterns
 from django.urls import reverse
@@ -120,6 +122,13 @@ class BookInstance(models.Model):
         choices=LOAN_STATUS,
         blank=True, null=True)
 
+    borrower = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
     class Meta:
         ordering = ['due_back']
 
@@ -128,6 +137,12 @@ class BookInstance(models.Model):
         String for representing the model object
         '''
         return '%s (%s)' % (self.id, self.book.title)
+
+    @property
+    def is_overdue(self):
+        if date.today() > self.due_back:
+            return True
+        return False
 
 
 class Author(models.Model):
