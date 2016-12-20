@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Renew: {{ bookinst.book.title }}</h1>
+    <p>Borrower: {{ bookinst.borrower }}</p>
+    <p class="{% if bookinst.is_overdue %}text-danger{% endif %}">Due back: {{ bookinst.due_back }}</p>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock  %}
