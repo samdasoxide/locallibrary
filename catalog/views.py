@@ -68,6 +68,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(generic.ListView):
     model = Author
+    paginate_by = 3
 
 
 class AuthorDetailView(generic.DetailView):
@@ -124,7 +125,7 @@ def renew_book_librarian(request, pk):
             return HttpResponseRedirect(reverse('all-borrowed'))
     # If this a GET (or any other method) create the defauld form
     else:
-        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=4)
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
         form = RenewBookForm(initial={'renewal-date': proposed_renewal_date, })
 
     return render(request,
